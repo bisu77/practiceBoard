@@ -12,8 +12,9 @@ spring:
       hibernate:
         #        show_sql: true
         format_sql: true
+        default_batch_fetch_size: 50
 server:
-  port: 8081
+  port: 8088
 
 logging:
   level:
