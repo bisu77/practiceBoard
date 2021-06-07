@@ -31,7 +31,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
 
     @Override
     public Page<MemberDto> searchDynamic(MemberSearchCond memberSearchCond, Pageable pageable){
-        List<MemberDto> content = getContent(memberSearchCond, pageable);
+        List<MemberDto> content = getContent(memberSearchCond, pageable);//custom QueryUtil 사용
         return PageableExecutionUtils.getPage(content, pageable, getCountJpaQuery(memberSearchCond)::fetchCount);
     }
 

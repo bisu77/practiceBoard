@@ -2,7 +2,10 @@ package com.practice.service;
 
 import com.practice.dto.MemberDto;
 import com.practice.dto.cond.MemberSearchCond;
+import com.practice.error.exception.member.MemberDuplicateException;
+import com.practice.error.exception.member.MemberNotFoundException;
 import com.practice.repository.MemberRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberServiceTest {
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    MemberService memberService;
 
     @Test
     @DisplayName("querydsl테스트")
@@ -79,5 +85,17 @@ class MemberServiceTest {
         for (MemberDto member : members) {
             System.out.println("member = " + member);
         }
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 회원 상세조회")
+    public void memberNotFoundExceptionTest() throws Exception{
+        Assertions.assertThrows(MemberNotFoundException.class,()->memberService.findMemberById(300));
+    }
+
+    @Test
+    @DisplayName("존재하는 회원 아이디 조회")
+    public void findMemberByName() throws Exception{
+        Assertions.assertThrows(MemberDuplicateException.class,() -> memberService.checkDuplicateUserId("rudwns2"));
     }
 }
