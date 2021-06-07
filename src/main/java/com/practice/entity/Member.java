@@ -17,6 +17,7 @@ public class Member extends BaseTimeEntity{
     private Long id;
 
     @NotEmpty
+    @Column(unique = true, updatable = false)
     private String userId;
     @NotEmpty
     private String name;
