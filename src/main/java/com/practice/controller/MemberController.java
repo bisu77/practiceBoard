@@ -16,32 +16,38 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @RestController
+@RequestMapping("/members")
 @Slf4j
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/member/search")
+    @GetMapping("/search")
     @ResponseBody
     public Page<MemberDto> searchMember(MemberSearchCond cond, Pageable pageable){//queryUtil 사용하여 동적 페이징 && order by
-        return memberService.searchDynamic(cond, pageable);
+        return memberService.searchDynamic(cond, pageable).map(MemberDto::new);
     }
 
-    @GetMapping("/member/search2")
+    @GetMapping("/search2")
     @ResponseBody
     public Page<MemberDto> searchMember2(MemberSearchCond cond, Pageable pageable){//QueryDsl4Supoort>pagination 사용하여 동적페이징 && order by
-        return memberService.searchCustomCountQuery(cond, pageable);
+        return memberService.searchCustomCountQuery(cond, pageable).map(MemberDto::new);
     }
 
-    @GetMapping("/member/{id}")
-    public MemberDto searchDetailMember(@PathVariable long id){
-        return memberService.findMemberById(id);
+    @GetMapping("/{id}")
+    public MemberDto searchDetailMember(@PathVariable Long id){
+        return new MemberDto(memberService.findMemberDtoById(id));
     }
 
-    @PostMapping("/member/join")
+    @PutMapping("/{id}")
+    public MemberDto updateMember(@PathVariable Long id, @RequestBody @Valid final MemberRequest request){
+        return new MemberDto(memberService.updateMember(id, request.toDto()));
+    }
+
+    @PostMapping("/join")
     public MemberDto join(@Valid @RequestBody final MemberRequest request){
-        return memberService.join(request.toMember());
+        return new MemberDto(memberService.join(request.toEntity()));
     }
 
     @Getter
@@ -53,7 +59,11 @@ public class MemberController {
 
         private Address address;
 
-        public Member toMember(){
+        public MemberDto toDto(){
+            return new MemberDto(userId, name, address);
+        }
+
+        public Member toEntity(){
             return new Member(userId, name, address);
         }
     }

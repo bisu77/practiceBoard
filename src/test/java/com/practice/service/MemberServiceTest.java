@@ -1,7 +1,7 @@
 package com.practice.service;
 
-import com.practice.dto.MemberDto;
 import com.practice.dto.cond.MemberSearchCond;
+import com.practice.entity.Member;
 import com.practice.error.exception.member.MemberDuplicateException;
 import com.practice.error.exception.member.MemberNotFoundException;
 import com.practice.repository.MemberRepository;
@@ -32,7 +32,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("querydsl테스트")
     public void querydslBasicSelect() throws Exception{
-        List<MemberDto> basicSelect = memberRepository.searchAll();
+        List<Member> basicSelect = memberRepository.searchAll();
         assertThat(basicSelect.size()).isEqualTo(100);
     }
 
@@ -43,12 +43,12 @@ class MemberServiceTest {
         Sort idSortDesc = Sort.by(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(0,10, idSortDesc);
 
-        Page<MemberDto> members = memberRepository.search(memberSearchCond, pageable);
+        Page<Member> members = memberRepository.search(memberSearchCond, pageable);
 
         assertThat(members.getTotalPages()).isEqualTo(5);
         assertThat(members.getContent().size()).isEqualTo(10);
 
-        for (MemberDto member : members) {
+        for (Member member : members) {
             System.out.println("member = " + member);
         }
     }
@@ -60,12 +60,12 @@ class MemberServiceTest {
         Sort idSortDesc = Sort.by(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(4,11, idSortDesc);
 
-        Page<MemberDto> members = memberRepository.searchCustomCountQuery(memberSearchCond, pageable);
+        Page<Member> members = memberRepository.searchCustomCountQuery(memberSearchCond, pageable);
 
         assertThat(members.getTotalPages()).isEqualTo(5);
         assertThat(members.getContent().size()).isEqualTo(6);
 
-        for (MemberDto member : members) {
+        for (Member member : members) {
             System.out.println("member = " + member);
         }
     }
@@ -77,12 +77,12 @@ class MemberServiceTest {
         Sort idSortDesc = Sort.by(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(4,11, idSortDesc);
 
-        Page<MemberDto> members = memberRepository.searchDynamic(memberSearchCond, pageable);
+        Page<Member> members = memberRepository.searchDynamic(memberSearchCond, pageable);
 
         assertThat(members.getTotalPages()).isEqualTo(5);
         assertThat(members.getContent().size()).isEqualTo(6);
 
-        for (MemberDto member : members) {
+        for (Member member : members) {
             System.out.println("member = " + member);
         }
     }
@@ -90,7 +90,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("존재하지 않는 회원 상세조회")
     public void memberNotFoundExceptionTest() throws Exception{
-        Assertions.assertThrows(MemberNotFoundException.class,()->memberService.findMemberById(300));
+        Assertions.assertThrows(MemberNotFoundException.class,()->memberService.findMemberDtoById(300));
     }
 
     @Test

@@ -1,7 +1,5 @@
 package com.practice.repository;
 
-import com.practice.dto.MemberDto;
-import com.practice.dto.QMemberDto;
 import com.practice.dto.cond.MemberSearchCond;
 import com.practice.entity.Member;
 import com.practice.repository.support.Querydsl4RepositorySupport;
@@ -24,28 +22,28 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
     }
 
     @Override
-    public List<MemberDto> searchAll(){
-        return select(new QMemberDto(member))
+    public List<Member> searchAll(){
+        return select(member)
                 .from(member).fetch();
     }
 
     @Override
-    public Page<MemberDto> searchDynamic(MemberSearchCond memberSearchCond, Pageable pageable){
-        List<MemberDto> content = getContent(memberSearchCond, pageable);//custom QueryUtil 사용
+    public Page<Member> searchDynamic(MemberSearchCond memberSearchCond, Pageable pageable){
+        List<Member> content = getContent(memberSearchCond, pageable);//custom QueryUtil 사용
         return PageableExecutionUtils.getPage(content, pageable, getCountJpaQuery(memberSearchCond)::fetchCount);
     }
 
     @Override
-    public Page<MemberDto> search(MemberSearchCond memberSearchCond, Pageable pageable){
+    public Page<Member> search(MemberSearchCond memberSearchCond, Pageable pageable){
         return applyPagination(pageable, jpaQueryFactory -> getContentJpaQuery(memberSearchCond));
     }
 
     @Override
-    public Page<MemberDto> searchCustomCountQuery(MemberSearchCond memberSearchCond, Pageable pageable){
+    public Page<Member> searchCustomCountQuery(MemberSearchCond memberSearchCond, Pageable pageable){
         return applyPagination(pageable, jpaQueryFactory -> getContentJpaQuery(memberSearchCond), jpaQueryFactory -> getCountJpaQuery(memberSearchCond));
     }
 
-    private List<MemberDto> getContent(MemberSearchCond memberSearchCond, Pageable pageable){
+    private List<Member> getContent(MemberSearchCond memberSearchCond, Pageable pageable){
         return getContentJpaQuery(memberSearchCond)
                 .orderBy(
                         QueryUtil.getOrderSpecifier(pageable.getSort(), Member.class)
@@ -56,8 +54,8 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
                 .fetch();
     }
 
-    private JPAQuery<MemberDto> getContentJpaQuery(MemberSearchCond memberSearchCond){
-        return select(new QMemberDto(member))
+    private JPAQuery<Member> getContentJpaQuery(MemberSearchCond memberSearchCond){
+        return select(member)
                 .from(member)
                 .where(
                         userIdEq(memberSearchCond.getUserId())
@@ -65,8 +63,8 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
                 );
     }
 
-    private JPAQuery<MemberDto> getCountJpaQuery(MemberSearchCond memberSearchCond){
-        return select(new QMemberDto(member))
+    private JPAQuery<Member> getCountJpaQuery(MemberSearchCond memberSearchCond){
+        return select(member)
                 .from(member)
                 .where(
                         userIdEq(memberSearchCond.getUserId())

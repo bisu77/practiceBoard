@@ -28,22 +28,39 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public MemberDto join(Member member){
+    public Member join(Member member){
         checkDuplicateUserId(member.getUserId());
-        return new MemberDto(memberRepository.save(member));
+        return memberRepository.save(member);
     }
 
-    public List<MemberDto> findAll(){
+    public List<Member> findAll(){
         return memberRepository.searchAll();
     }
 
-    public MemberDto findMemberById(long id){
+    public Member findMemberDtoById(long id){
         Optional<Member> findMember = memberRepository.findById(id);
 
-        return new MemberDto(
-                findMember.orElseThrow(
+        return findMember.orElseThrow(
                         () -> new MemberNotFoundException(id)
-                ));
+                );
+    }
+
+    public Page<Member> search(MemberSearchCond cond, Pageable pageable){
+        return memberRepository.search(cond, pageable);
+    }
+
+    public Page<Member> searchDynamic(MemberSearchCond cond, Pageable pageable){
+        return memberRepository.searchDynamic(cond, pageable);
+    }
+
+    public Page<Member> searchCustomCountQuery(MemberSearchCond cond, Pageable pageable){
+        return memberRepository.searchCustomCountQuery(cond, pageable);
+    }
+
+    public Member updateMember(Long id, MemberDto requestMember) {
+        Member findMember = findMemberById(id);
+        findMember.memberUpdate(requestMember.getName(), requestMember.getAddress());
+        return memberRepository.save(findMember);
     }
 
     public void checkDuplicateUserId(String userId){
@@ -52,16 +69,11 @@ public class MemberService {
         });
     }
 
+    private Member findMemberById(long id){
+        Optional<Member> findMember = memberRepository.findById(id);
 
-    public Page<MemberDto> search(MemberSearchCond cond, Pageable pageable){
-        return memberRepository.search(cond, pageable);
-    }
-
-    public Page<MemberDto> searchDynamic(MemberSearchCond cond, Pageable pageable){
-        return memberRepository.searchDynamic(cond, pageable);
-    }
-
-    public Page<MemberDto> searchCustomCountQuery(MemberSearchCond cond, Pageable pageable){
-        return memberRepository.searchCustomCountQuery(cond, pageable);
+        return findMember.orElseThrow(
+                        () -> new MemberNotFoundException(id)
+                );
     }
 }

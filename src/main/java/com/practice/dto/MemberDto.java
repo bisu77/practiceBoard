@@ -6,6 +6,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,12 @@ public class MemberDto {
     private Address address;
     private List<PostDto> posts;
 
-    @QueryProjection
+    /**
+     *  Repository에서 기본 Entity(Member) 반환하기 때문에 @QueryProjection 필요 없음
+     *  Controller에서 DTO변환하기
+     * @param member
+     */
+    //@QueryProjection
     public MemberDto(Member member){
         userId = member.getUserId();
         name = member.getName();
@@ -25,5 +31,11 @@ public class MemberDto {
         posts = member.getPosts().stream()
                     .map(post->new PostDto(post))
                     .collect(Collectors.toList());
+    }
+
+    public MemberDto(@NotEmpty String userId, @NotEmpty String name, Address address) {
+        this.userId = userId;
+        this.name = name;
+        this.address = address;
     }
 }
