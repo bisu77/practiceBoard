@@ -40,14 +40,20 @@ public class MemberController {
         return new MemberDto(memberService.findMemberDtoById(id));
     }
 
+    @PostMapping("/join")
+    public MemberDto join(@Valid @RequestBody final MemberRequest request){
+        return new MemberDto(memberService.join(request.toEntity()));
+    }
+
     @PutMapping("/{id}")
     public MemberDto updateMember(@PathVariable Long id, @RequestBody @Valid final MemberRequest request){
         return new MemberDto(memberService.updateMember(id, request.toDto()));
     }
 
-    @PostMapping("/join")
-    public MemberDto join(@Valid @RequestBody final MemberRequest request){
-        return new MemberDto(memberService.join(request.toEntity()));
+    @DeleteMapping("/{id}")
+    public void deleteMember(@PathVariable Long id){
+        memberService.deleteMember(id);
+        return;
     }
 
     @Getter

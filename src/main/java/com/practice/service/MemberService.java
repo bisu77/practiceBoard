@@ -69,6 +69,13 @@ public class MemberService {
         });
     }
 
+    public void deleteMember(Long id) {
+        Member findMember = findMemberById(id);
+        findMember.updateDelete(true);
+        memberRepository.save(findMember);
+        return;
+    }
+
     private Member findMemberById(long id){
         Optional<Member> findMember = memberRepository.findById(id);
 

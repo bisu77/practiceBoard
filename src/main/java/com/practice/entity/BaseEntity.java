@@ -19,4 +19,10 @@ public abstract class BaseEntity extends BaseTimeEntity{
 
     @LastModifiedBy
     private String modifiedBy;
+
+    private boolean deleted;
+
+    public void updateDelete(boolean deleted){
+        this.deleted = deleted;
+    }
 }
