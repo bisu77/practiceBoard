@@ -23,14 +23,22 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping
+    public Page<MemberDto> findMembers(Pageable pageable){
+        return memberService.findAll(pageable).map(MemberDto::new);
+    }
+
+    @PostMapping
+    public MemberDto join(@Valid @RequestBody final MemberRequest request){
+        return new MemberDto(memberService.join(request.toEntity()));
+    }
+
     @GetMapping("/search")
-    @ResponseBody
     public Page<MemberDto> searchMember(MemberSearchCond cond, Pageable pageable){//queryUtil 사용하여 동적 페이징 && order by
         return memberService.searchDynamic(cond, pageable).map(MemberDto::new);
     }
 
     @GetMapping("/search2")
-    @ResponseBody
     public Page<MemberDto> searchMember2(MemberSearchCond cond, Pageable pageable){//QueryDsl4Supoort>pagination 사용하여 동적페이징 && order by
         return memberService.searchCustomCountQuery(cond, pageable).map(MemberDto::new);
     }
@@ -38,11 +46,6 @@ public class MemberController {
     @GetMapping("/{id}")
     public MemberDto searchDetailMember(@PathVariable Long id){
         return new MemberDto(memberService.findMemberDtoById(id));
-    }
-
-    @PostMapping("/join")
-    public MemberDto join(@Valid @RequestBody final MemberRequest request){
-        return new MemberDto(memberService.join(request.toEntity()));
     }
 
     @PutMapping("/{id}")
@@ -73,5 +76,4 @@ public class MemberController {
             return new Member(userId, name, address);
         }
     }
-
 }

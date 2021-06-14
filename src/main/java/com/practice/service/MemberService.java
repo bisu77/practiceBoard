@@ -37,6 +37,10 @@ public class MemberService {
         return memberRepository.searchAll();
     }
 
+    public Page<Member> findAll(Pageable pageable){
+        return memberRepository.findAll(pageable);
+    }
+
     public Member findMemberDtoById(long id){
         Optional<Member> findMember = memberRepository.findById(id);
 
