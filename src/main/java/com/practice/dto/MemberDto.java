@@ -3,7 +3,9 @@ package com.practice.dto;
 import com.practice.entity.Address;
 import com.practice.entity.Member;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDto {
     private String userId;
     private String name;
