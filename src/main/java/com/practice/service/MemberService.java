@@ -6,9 +6,7 @@ import com.practice.entity.Member;
 import com.practice.error.exception.member.MemberDuplicateException;
 import com.practice.error.exception.member.MemberNotFoundException;
 import com.practice.repository.MemberRepository;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,14 +17,9 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class MemberService {
-    private MemberRepository memberRepository;
-
-    @Autowired
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    private final MemberRepository memberRepository;
 
     public Member join(Member member){
         checkDuplicateUserId(member.getUserId());
@@ -54,7 +47,7 @@ public class MemberService {
     }
 
     public Page<Member> searchDynamic(MemberSearchCond cond, Pageable pageable){
-        return memberRepository.searchDynamic(cond, pageable);
+        return memberRepository.searchQueryUtil(cond, pageable);
     }
 
     public Page<Member> searchCustomCountQuery(MemberSearchCond cond, Pageable pageable){

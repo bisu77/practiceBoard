@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MemberRepositoryCustom {
     List<Member> searchAll();
-    Page<Member> searchDynamic(MemberSearchCond memberSearchCond, Pageable pageable);
+    Page<Member> searchQueryUtil(MemberSearchCond memberSearchCond, Pageable pageable);
     Page<Member> search(MemberSearchCond memberSearchCond, Pageable pageable);
     Page<Member> searchCustomCountQuery(MemberSearchCond memberSearchCond, Pageable pageable);
 }

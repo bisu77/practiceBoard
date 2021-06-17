@@ -1,12 +1,15 @@
 package com.practice.dto;
 
 import com.practice.entity.Post;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class PostDto {
+    private Long memberId;
+    private Long boardId;
     private String userId;
     private String userName;
     private String boardName;
@@ -15,6 +18,8 @@ public class PostDto {
     private Long viewCount;
 
     public PostDto(Post post){
+        memberId = post.getMember().getId();
+        boardId = post.getBoard().getId();
         userId = post.getMember().getUserId();
         userName = post.getMember().getName();
         boardName = post.getBoard().getName();

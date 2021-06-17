@@ -28,7 +28,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
     }
 
     @Override
-    public Page<Member> searchDynamic(MemberSearchCond memberSearchCond, Pageable pageable){
+    public Page<Member> searchQueryUtil(MemberSearchCond memberSearchCond, Pageable pageable){
         List<Member> content = getContent(memberSearchCond, pageable);//custom QueryUtil 사용
         return PageableExecutionUtils.getPage(content, pageable, getCountJpaQuery(memberSearchCond)::fetchCount);
     }
@@ -46,7 +46,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
     private List<Member> getContent(MemberSearchCond memberSearchCond, Pageable pageable){
         return getContentJpaQuery(memberSearchCond)
                 .orderBy(
-                        QueryUtil.getOrderSpecifier(pageable.getSort(), Member.class)
+                        QueryUtil.getOrderSpecifier(pageable.getSort(), Member.class, "member1")
                                 .stream().toArray(OrderSpecifier[]::new)
                 )
                 .offset(pageable.getOffset())
@@ -55,28 +55,26 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
     }
 
     private JPAQuery<Member> getContentJpaQuery(MemberSearchCond memberSearchCond){
-        return select(member)
-                .from(member)
+        return selectFrom(member)
                 .where(
-                        userIdEq(memberSearchCond.getUserId())
-                        , nameEq(memberSearchCond.getName())
+                        userIdStartsWith(memberSearchCond.getUserId())
+                        , nameStartsWith(memberSearchCond.getName())
                 );
     }
 
     private JPAQuery<Member> getCountJpaQuery(MemberSearchCond memberSearchCond){
-        return select(member)
-                .from(member)
+        return selectFrom(member)
                 .where(
-                        userIdEq(memberSearchCond.getUserId())
-                        , nameEq(memberSearchCond.getName())
+                        userIdStartsWith(memberSearchCond.getUserId())
+                        , nameStartsWith(memberSearchCond.getName())
                 );
     }
 
-    private BooleanExpression userIdEq(String userId){
+    private BooleanExpression userIdStartsWith(String userId){
         return hasText(userId) ? member.userId.startsWith(userId) : null;
     }
 
-    private BooleanExpression nameEq(String name){
+    private BooleanExpression nameStartsWith(String name){
         return hasText(name) ? member.name.startsWith(name) : null;
     }
 }

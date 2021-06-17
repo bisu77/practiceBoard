@@ -77,7 +77,7 @@ class MemberServiceTest {
         Sort idSortDesc = Sort.by(Sort.Order.desc("id"));
         Pageable pageable = PageRequest.of(4,11, idSortDesc);
 
-        Page<Member> members = memberRepository.searchDynamic(memberSearchCond, pageable);
+        Page<Member> members = memberRepository.searchQueryUtil(memberSearchCond, pageable);
 
         assertThat(members.getTotalPages()).isEqualTo(5);
         assertThat(members.getContent().size()).isEqualTo(6);
