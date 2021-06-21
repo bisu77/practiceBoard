@@ -37,4 +37,19 @@ public class PostController {
         return postService.searchPostsQueryUtil(pageable, postSearchCond).map(PostDto::new);
     }
 
+    @GetMapping("/{id}")
+    public PostDto detailPost(@PathVariable final Long id){
+        return new PostDto(postService.detailPost(id));
+    }
+
+    @PutMapping("/{id}")
+    public PostDto updatePost(@PathVariable final Long id, @RequestBody final PostDto postDto){
+        return new PostDto(postService.updatePost(id, postDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public PostDto deletePost(@PathVariable final Long id){
+        return new PostDto(postService.deletePost(id));
+    }
+
 }

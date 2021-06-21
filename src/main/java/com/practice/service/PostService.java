@@ -7,6 +7,7 @@ import com.practice.entity.Member;
 import com.practice.entity.Post;
 import com.practice.error.exception.board.BoardNotFoundException;
 import com.practice.error.exception.member.MemberNotFoundException;
+import com.practice.error.exception.post.PostNotFoundException;
 import com.practice.repository.BoardRepository;
 import com.practice.repository.MemberRepository;
 import com.practice.repository.PostRepository;
@@ -60,5 +61,41 @@ public class PostService {
 
     public Page<Post> searchPostsQueryUtil(Pageable pageable, PostSearchCond postSearchCond) {
         return postRepository.searchPostCondQueryUtil(pageable, postSearchCond);
+    }
+
+    public Post detailPost(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new PostNotFoundException(id)
+        );
+
+        post.addViewCount();
+
+        return post;
+    }
+
+    public Post updatePost(Long id, PostDto postDto) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new PostNotFoundException(id)
+        );
+
+        memberRepository.findByIdAndUserId(postDto.getMemberId(), postDto.getUserId()).orElseThrow(
+                () -> new MemberNotFoundException(postDto.getMemberId())
+        );
+
+        Board board = boardRepository.findById(postDto.getBoardId()).orElseThrow(
+                () -> new BoardNotFoundException(postDto.getBoardId())
+        );
+
+        post.update(postDto, board);
+        return postRepository.save(post);
+    }
+
+    public Post deletePost(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new PostNotFoundException(id)
+        );
+
+        post.updateDelete(true);
+        return postRepository.save(post);
     }
 }

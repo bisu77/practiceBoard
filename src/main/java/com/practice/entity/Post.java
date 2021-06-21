@@ -1,5 +1,6 @@
 package com.practice.entity;
 
+import com.practice.dto.PostDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class Post extends BaseTimeEntity{
+public class Post extends BaseEntity{
     @Id @GeneratedValue
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,5 +30,15 @@ public class Post extends BaseTimeEntity{
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
+    }
+
+    public void addViewCount(){
+        viewCount++;
+    }
+
+    public void update(PostDto postDto, Board board){
+        this.title = postDto.getTitle();
+        this.content = postDto.getContent();
+        this.board = board;
     }
 }
