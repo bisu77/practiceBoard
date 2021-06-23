@@ -54,9 +54,8 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMember(@PathVariable final Long id){
-        memberService.deleteMember(id);
-        return;
+    public MemberDto deleteMember(@PathVariable final Long id){
+        return new MemberDto(memberService.deleteMember(id));
     }
 
     @Getter
@@ -66,14 +65,16 @@ public class MemberController {
         @NotBlank
         private String name;
 
-        private Address address;
+        private String street;
+        private String detailAddress;
+        private String zipcode;
 
         public MemberDto toDto(){
-            return new MemberDto(userId, name, address);
+            return new MemberDto(userId, name, street, detailAddress, zipcode);
         }
 
         public Member toEntity(){
-            return new Member(userId, name, address);
+            return new Member(userId, name, new Address(street, detailAddress, zipcode));
         }
     }
 }

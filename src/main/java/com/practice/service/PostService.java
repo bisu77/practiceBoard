@@ -74,7 +74,7 @@ public class PostService {
     }
 
     public Post updatePost(Long id, PostDto postDto) {
-        Post post = postRepository.findById(id).orElseThrow(
+        Post post = postRepository.findByIdAndMemberIdAndBoardId(id, postDto.getMemberId(), postDto.getBoardId()).orElseThrow(
                 () -> new PostNotFoundException(id)
         );
 
@@ -82,12 +82,13 @@ public class PostService {
                 () -> new MemberNotFoundException(postDto.getMemberId())
         );
 
-        Board board = boardRepository.findById(postDto.getBoardId()).orElseThrow(
+        boardRepository.findById(postDto.getBoardId()).orElseThrow(
                 () -> new BoardNotFoundException(postDto.getBoardId())
         );
 
-        post.update(postDto, board);
-        return postRepository.save(post);
+        post.update(postDto);
+
+        return post;
     }
 
     public Post deletePost(Long id) {
@@ -96,6 +97,6 @@ public class PostService {
         );
 
         post.updateDelete(true);
-        return postRepository.save(post);
+        return post;
     }
 }

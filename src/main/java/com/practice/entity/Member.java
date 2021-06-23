@@ -3,6 +3,7 @@ package com.practice.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -27,14 +28,20 @@ public class Member extends BaseEntity{
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    public Member(@NotEmpty String userId, @NotEmpty String name, Address address) {
+    public Member(@NotEmpty String userId, @NotEmpty String name, Address address){
         this.userId = userId;
         this.name = name;
         this.address = address;
     }
 
-    public void memberUpdate(String name, Address address){
+    public void memberUpdate(String name, String street, String detailAddress, String zipcode){
         this.name = name;
-        this.address = address;
+        putAddress(street,detailAddress,zipcode);
+    }
+
+    private void putAddress(String street, String detailAddress, String zipcode){
+        if(StringUtils.hasText(street))  this.address.setStreet(street);
+        if(StringUtils.hasText(detailAddress))  this.address.setDetailAddress(detailAddress);
+        if(StringUtils.hasText(zipcode))  this.address.setZipcode(zipcode);
     }
 }

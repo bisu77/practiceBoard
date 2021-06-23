@@ -54,10 +54,10 @@ public class MemberService {
         return memberRepository.searchCustomCountQuery(cond, pageable);
     }
 
-    public Member updateMember(Long id, MemberDto requestMember) {
+    public Member updateMember(Long id, MemberDto memberDto) {
         Member findMember = findMemberById(id);
-        findMember.memberUpdate(requestMember.getName(), requestMember.getAddress());
-        return memberRepository.save(findMember);
+        findMember.memberUpdate(memberDto.getName(), memberDto.getStreet(), memberDto.getDetailAddress(), memberDto.getZipcode());
+        return findMember;
     }
 
     public void checkDuplicateUserId(String userId){
@@ -66,11 +66,10 @@ public class MemberService {
         });
     }
 
-    public void deleteMember(Long id) {
+    public Member deleteMember(Long id) {
         Member findMember = findMemberById(id);
         findMember.updateDelete(true);
-        memberRepository.save(findMember);
-        return;
+        return findMember;
     }
 
     private Member findMemberById(long id){

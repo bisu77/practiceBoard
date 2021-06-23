@@ -1,11 +1,13 @@
 package com.practice.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
+@Setter
 @Getter
 @ToString
 public class Address {

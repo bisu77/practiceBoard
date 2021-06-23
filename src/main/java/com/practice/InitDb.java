@@ -47,8 +47,7 @@ public class InitDb {
     }
 
     private Member createMember(String userId, String name, String zipcode, String street, String detailAddress){
-        Address address = new Address(zipcode, street, detailAddress);
-        Member member = new Member(userId, name, address);
+        Member member = new Member(userId, name, new Address(street, detailAddress, zipcode));
 
         return memberRepository.save(member);
     }

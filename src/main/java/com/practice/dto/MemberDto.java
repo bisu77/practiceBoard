@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 public class MemberDto {
     private String userId;
     private String name;
-    private Address address;
+    private String street;
+    private String detailAddress;
+    private String zipcode;
     private List<PostDto> posts;
 
     /**
@@ -30,15 +32,19 @@ public class MemberDto {
     public MemberDto(Member member){
         userId = member.getUserId();
         name = member.getName();
-        address = member.getAddress();
+        street = member.getAddress() == null ? null : member.getAddress().getStreet();
+        detailAddress = member.getAddress() == null ? null : member.getAddress().getDetailAddress();
+        zipcode = member.getAddress() == null ? null : member.getAddress().getZipcode();
         posts = member.getPosts().stream()
                     .map(post->new PostDto(post))
                     .collect(Collectors.toList());
     }
 
-    public MemberDto(@NotEmpty String userId, @NotEmpty String name, Address address) {
+    public MemberDto(@NotEmpty String userId, @NotEmpty String name, String street, String detailAddress, String zipcode) {
         this.userId = userId;
         this.name = name;
-        this.address = address;
+        this.street = street;
+        this.detailAddress = detailAddress;
+        this.zipcode = zipcode;
     }
 }

@@ -36,9 +36,8 @@ public class Post extends BaseEntity{
         viewCount++;
     }
 
-    public void update(PostDto postDto, Board board){
+    public void update(PostDto postDto){
         this.title = postDto.getTitle();
         this.content = postDto.getContent();
-        this.board = board;
     }
 }
