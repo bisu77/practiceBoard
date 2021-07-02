@@ -74,7 +74,11 @@ public class MemberController {
         }
 
         public Member toEntity(){
-            return new Member(userId, name, new Address(street, detailAddress, zipcode));
+            return Member.builder()
+                    .userId(userId)
+                    .name(name)
+                    .address(new Address(street, detailAddress, zipcode))
+                    .build();
         }
     }
 }

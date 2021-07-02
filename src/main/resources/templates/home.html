@@ -8,7 +8,8 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div class="jumbotron">
-        <h1 th:if="${member}!=null" th:text="'HELLO ' + ${member.userId} + '(' + ${member.name} + ')'"></h1>
+        <h3 th:if="${member}!=null" th:text="${member.userId} + '(' + ${member.name} + ')'"></h3>
+        <a class="btn btn-sm btn-primary" href="/logout" th:style="${member}!=null ? 'display:block' : 'display:none'">Logout</a>
         <p class="lead">OAuth2.0</p>
         <p>
             <a class="btn btn-lg btn-secondary" href="/oauth2/authorization/google">구글 로그인</a>

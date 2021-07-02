@@ -1,9 +1,6 @@
 package com.practice;
 
-import com.practice.entity.Address;
-import com.practice.entity.Board;
-import com.practice.entity.Member;
-import com.practice.entity.Post;
+import com.practice.entity.*;
 import com.practice.repository.BoardRepository;
 import com.practice.repository.MemberRepository;
 import com.practice.repository.PostRepository;
@@ -47,7 +44,12 @@ public class InitDb {
     }
 
     private Member createMember(String userId, String name, String zipcode, String street, String detailAddress){
-        Member member = new Member(userId, name, new Address(street, detailAddress, zipcode));
+        Member member = Member.builder()
+                            .userId(userId)
+                            .name(name)
+                            .address(new Address(street, detailAddress, zipcode))
+                            //.role(Role.GUEST)
+                            .build();
 
         return memberRepository.save(member);
     }

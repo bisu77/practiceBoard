@@ -20,7 +20,11 @@ class BoardApplicationTests {
 	@Test
 	void firstTest() {
 		Address address = new Address("180-14","소하우림필유","14070");
-		Member member = new Member("rudwns7552","윤경준",address);
+		Member member = Member.builder()
+						.userId("rudwns7552")
+						.name("윤경준")
+						.address(address)
+						.build();
 		memberRepository.save(member);
 	}
 }
